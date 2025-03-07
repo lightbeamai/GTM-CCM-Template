@@ -1,2 +1,5 @@
 homepage: "https://lightbeam.ai"
 documentation: ""
+versions:
+  - sha: d82c7645d86d89a01e125521441ae18ba39f7d2a
+    changeNotes: initial commit
