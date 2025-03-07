@@ -14,6 +14,10 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "Lightbeam CMP",
+  "categories": [
+    "TAG_MANAGEMENT",
+    "PERSONALIZATION"
+  ],
   "brand": {
     "id": "Lightbeam",
     "displayName": "Lightbeam",
