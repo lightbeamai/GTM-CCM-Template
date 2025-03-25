@@ -1,2 +1,2 @@
-# Lightbeam's Google Tag Manager Template for Cookie Consent Management
-Load Lightbeam's script tag using Google Tag Manager. It loads the widget and sets the Google Consent Mode.
+Lightbeam CMP Deployment Guide for Google Tag Manager
+https://docs.lightbeam.ai/lxqobxw6ak7CTnsQjikH/core-features/privacyops/cookie-consent/cmp-deployment-guide-for-google-tag-manager 
