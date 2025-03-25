@@ -2,8 +2,8 @@ homepage: "https://lightbeam.ai"
 documentation: "https://docs.lightbeam.ai/lxqobxw6ak7CTnsQjikH/core-features/privacyops/cookie-consent/cmp-deployment-guide-for-google-tag-manager"
 versions:
 # Latest version
-  - sha: fa8305df686a65883af0e3044c27d7cfef9d4e44
-    changeNotes: add tag categories
+  - sha: cc867332b198049e4e9de5acdd090e65e2be5cb1
+    changeNotes: added documentation link
 # Older versions
   - sha: d82c7645d86d89a01e125521441ae18ba39f7d2a
     changeNotes: initial commit
