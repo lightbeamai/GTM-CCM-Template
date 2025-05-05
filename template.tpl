@@ -60,6 +60,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const setInWindow = require('setInWindow');
 const injectScript = require('injectScript');
+const encodeUri = require('encodeUri');
 
 const lbCookieConsentGcm = {
   scriptHostURL: data.scriptHostURL,
@@ -68,7 +69,7 @@ const lbCookieConsentGcm = {
 
 if(data.scriptHostURL){
   setInWindow("lbCookieConsentGcm", lbCookieConsentGcm);
-  injectScript(data.scriptHostURL, data.gtmOnSuccess, data.gtmOnFailure);
+  injectScript(encodeUri(data.scriptHostURL), data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 
