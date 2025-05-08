@@ -2,6 +2,9 @@ homepage: "https://lightbeam.ai"
 documentation: "https://docs.lightbeam.ai/lxqobxw6ak7CTnsQjikH/core-features/privacyops/cookie-consent/cmp-deployment-guide-for-google-tag-manager"
 versions:
 # Latest version
+  - sha: c3778e02a79e468c4a1a372b02525fe7e5bef310
+    changeNotes: used encodeUri for scriptHostURL user-defined variable
+# Older versions
   - sha: cc867332b198049e4e9de5acdd090e65e2be5cb1
     changeNotes: added documentation link
 # Older versions
