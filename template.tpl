@@ -70,6 +70,8 @@ const lbCookieConsentGcm = {
 if(data.scriptHostURL){
   setInWindow("lbCookieConsentGcm", lbCookieConsentGcm);
   injectScript(encodeUri(data.scriptHostURL), data.gtmOnSuccess, data.gtmOnFailure);
+} else {
+  data.gtmOnFailure();
 }
 
 
