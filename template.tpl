@@ -52,6 +52,77 @@ ___TEMPLATE_PARAMETERS___
         ]
       }
     ]
+  },
+  {
+    "type": "PARAM_TABLE",
+    "name": "gcmMapping",
+    "displayName": "Google Consent Mode Configuration",
+    "paramTableColumns": [
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "gcmCategory",
+          "displayName": "GCM Category",
+          "macrosInSelect": false,
+          "selectItems": [
+            {
+              "value": "ad_personalization",
+              "displayValue": "ad_personalization"
+            },
+            {
+              "value": "ad_storage",
+              "displayValue": "ad_storage"
+            },
+            {
+              "value": "ad_user_data",
+              "displayValue": "ad_user_data"
+            },
+            {
+              "value": "analytics_storage",
+              "displayValue": "analytics_storage"
+            },
+            {
+              "value": "functionality_storage",
+              "displayValue": "functionality_storage"
+            },
+            {
+              "value": "personalization_storage",
+              "displayValue": "personalization_storage"
+            },
+            {
+              "value": "security_storage",
+              "displayValue": "security_storage"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": true
+      },
+      {
+        "param": {
+          "type": "RADIO",
+          "name": "defaultConsent",
+          "displayName": "Default Consent",
+          "radioItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default (opt-out consent)"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default (opt-in consent)"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Off by default"
+        },
+        "isUnique": false
+      }
+    ],
+    "newRowButtonText": "Add GCM Category",
+    "newRowTitle": "Add Google Consent Mode Category",
+    "alwaysInSummary": false,
+    "help": "Add the GCM categories you will use and provide their default value"
   }
 ]
 
@@ -65,6 +136,7 @@ const encodeUri = require('encodeUri');
 const lbCookieConsentGcm = {
   scriptHostURL: data.scriptHostURL,
   webAppServerHost: data.webAppServerHost,
+  gcmMapping: data.gcmMapping || [],
 };
 
 if(data.scriptHostURL){
@@ -176,5 +248,4 @@ scenarios: []
 ___NOTES___
 
 Created on 3/7/2025, 5:02:15 PM
-
 
