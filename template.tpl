@@ -39,7 +39,7 @@ ___TEMPLATE_PARAMETERS___
     "displayName": "Script Host",
     "simpleValueType": true,
     "valueHint": "https://your_aws_hosting/cookie_consent/your_domain_id/main.js",
-    "help": "Path to a main.js file. Path should consist of AWS url, folder with script and initialization file name. Example: https://your_aws_hosting/cookie_consent_version/your_domain_id/main.js",
+    "help": "Path to a main.js file.\nPath should consist of AWS url, folder with script and initialization file name.\nExample: https://your_aws_hosting/cookie_consent_version/your_domain_id/main.js",
     "alwaysInSummary": true,
     "valueValidators": [
       {
@@ -132,14 +132,40 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const setInWindow = require('setInWindow');
 const injectScript = require('injectScript');
 const encodeUri = require('encodeUri');
+const setDefaultConsentState = require('setDefaultConsentState');
 
+// 1. Process Default Consents Synchronously
+// This block runs immediately when the tag fires, blocking cookies instantly
+const consentDefaults = {
+  ad_storage: 'denied',
+  analytics_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  functionality_storage: 'denied',
+  personalization_storage: 'denied',
+  security_storage: 'granted',
+};
+
+if (data.gcmMapping && data.gcmMapping.length > 0) {
+  data.gcmMapping.forEach((row) => {
+    if (row.gcmCategory) {
+      const status = row.defaultConsent === 'On by default' ? 'granted' : 'denied';
+      consentDefaults[row.gcmCategory] = status;
+    }
+  });
+}
+
+// Apply defaults immediately, even when gcmMapping is empty/missing.
+setDefaultConsentState(consentDefaults);
+
+// 2. Inject the External Script
 const lbCookieConsentGcm = {
   scriptHostURL: data.scriptHostURL,
   webAppServerHost: data.webAppServerHost,
   gcmMapping: data.gcmMapping || [],
 };
 
-if(data.scriptHostURL){
+if (data.scriptHostURL) {
   setInWindow("lbCookieConsentGcm", lbCookieConsentGcm);
   injectScript(encodeUri(data.scriptHostURL), data.gtmOnSuccess, data.gtmOnFailure);
 } else {
@@ -236,6 +262,70 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_consent",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "consentTypes",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "ad_storage"
+              },
+              {
+                "type": 1,
+                "string": "analytics_storage"
+              },
+              {
+                "type": 1,
+                "string": "ad_user_data"
+              },
+              {
+                "type": 1,
+                "string": "ad_personalization"
+              },
+              {
+                "type": 1,
+                "string": "functionality_storage"
+              },
+              {
+                "type": 1,
+                "string": "personalization_storage"
+              },
+              {
+                "type": 1,
+                "string": "security_storage"
+              }
+            ]
+          }
+        },
+        {
+          "key": "write",
+          "value": {
+            "type": 8,
+            "boolean": true
+          }
+        },
+        {
+          "key": "read",
+          "value": {
+            "type": 8,
+            "boolean": true
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -248,4 +338,3 @@ scenarios: []
 ___NOTES___
 
 Created on 3/7/2025, 5:02:15 PM
-
