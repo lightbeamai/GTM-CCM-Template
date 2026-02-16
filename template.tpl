@@ -163,6 +163,7 @@ const lbCookieConsentGcm = {
   scriptHostURL: data.scriptHostURL,
   webAppServerHost: data.webAppServerHost,
   gcmMapping: data.gcmMapping || [],
+  defaultsInitialized: true
 };
 
 if (data.scriptHostURL) {
