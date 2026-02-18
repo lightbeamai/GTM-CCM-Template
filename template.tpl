@@ -138,7 +138,7 @@ ___TEMPLATE_PARAMETERS___
           "simpleValueType": true,
           "valueHint": "eg. us-ca, gb, fr",
           "textAsList": false,
-          "help": "Enter region codes, separated by commas. (eg. us-ca, gb)",
+          "help": "Enter ISO 3166-2 region codes, separated by commas. (eg. us-ca, gb)",
           "valueValidators": [
             {
               "type": "NON_EMPTY"
