@@ -2,6 +2,9 @@ homepage: "https://lightbeam.ai"
 documentation: "https://docs.lightbeam.ai/lxqobxw6ak7CTnsQjikH/core-features/privacyops/cookie-consent/cmp-deployment-guide-for-google-tag-manager"
 versions:
 # Latest version
+  - sha: 020e21503e8503223141a63db4cf0b45735b672f
+    changeNotes: Add default consents configuration settings
+# Older versions
   - sha: fb34f0e69e9a34d2aaf47fe80a1d76938130c511
     changeNotes: added else block for error if scriptHostURL is not specified
 # Older versions
