@@ -102,7 +102,7 @@ ___TEMPLATE_PARAMETERS___
         "param": {
           "type": "RADIO",
           "name": "defaultConsent",
-          "displayName": "Default Consent",
+          "displayName": "Global Default Consent",
           "radioItems": [
             {
               "value": "On by default",
@@ -114,7 +114,8 @@ ___TEMPLATE_PARAMETERS___
             }
           ],
           "simpleValueType": true,
-          "defaultValue": "Off by default"
+          "defaultValue": "Off by default",
+          "help": "Region-specific defaults can be set in the next section."
         },
         "isUnique": false
       }
@@ -123,6 +124,202 @@ ___TEMPLATE_PARAMETERS___
     "newRowTitle": "Add Google Consent Mode Category",
     "alwaysInSummary": false,
     "help": "Add the GCM categories you will use and provide their default value"
+  },
+  {
+    "type": "PARAM_TABLE",
+    "name": "regionSpecificBehavior",
+    "displayName": "Region-Specific Default Consent Overrides",
+    "paramTableColumns": [
+      {
+        "param": {
+          "type": "TEXT",
+          "name": "region",
+          "displayName": "Region Code",
+          "simpleValueType": true,
+          "valueHint": "eg. us-ca, gb, fr",
+          "textAsList": false,
+          "help": "Enter region codes, separated by commas. (eg. us-ca, gb)",
+          "valueValidators": [
+            {
+              "type": "NON_EMPTY"
+            }
+          ]
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "analytics_storage",
+          "displayName": "analytics_storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_storage",
+          "displayName": "ad_storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "functionality_storage",
+          "displayName": "functionality_storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "personalization_storage",
+          "displayName": "personalization_storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "security_storage",
+          "displayName": "security_storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_user_data",
+          "displayName": "ad_user_data",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_personalization",
+          "displayName": "ad_personalization",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      }
+    ],
+    "newRowButtonText": "Add region-specific default",
+    "newRowTitle": "Add region-specific default",
+    "alwaysInSummary": false,
+    "help": "If you would like to have different default consent rules per region, you can enter those defaults here. Any region that is not defined will automatically take the global default set in the previous section."
   }
 ]
 
@@ -134,9 +331,28 @@ const injectScript = require('injectScript');
 const encodeUri = require('encodeUri');
 const setDefaultConsentState = require('setDefaultConsentState');
 
+const GCM_CATEGORIES = [
+  'analytics_storage',
+  'ad_storage',
+  'functionality_storage',
+  'personalization_storage',
+  'security_storage',
+  'ad_user_data',
+  'ad_personalization'
+];
+
+const parseRegionString = (regionString) => {
+  if (!regionString) return [];
+  return regionString
+    .split(',')
+    .map((code) => code.trim().toUpperCase())
+    .filter((code) => code);
+};
+
 // 1. Process Default Consents Synchronously
 // This block runs immediately when the tag fires, blocking cookies instantly
 const consentDefaults = {
+  wait_for_update: 500,
   ad_storage: 'denied',
   analytics_storage: 'denied',
   ad_user_data: 'denied',
@@ -158,11 +374,34 @@ if (data.gcmMapping && data.gcmMapping.length > 0) {
 // Apply defaults immediately, even when gcmMapping is empty/missing.
 setDefaultConsentState(consentDefaults);
 
+if (data.regionSpecificBehavior && data.regionSpecificBehavior.length > 0) {
+  data.regionSpecificBehavior.forEach((regionRule) => {
+    const regionCodes = parseRegionString(regionRule.region);
+    if (!regionCodes.length) return;
+
+    const regionalDefault = {
+      wait_for_update: 500,
+      region: regionCodes
+    };
+
+    GCM_CATEGORIES.forEach((category) => {
+      if (regionRule[category] === 'On by default') {
+        regionalDefault[category] = 'granted';
+      } else if (regionRule[category] === 'Off by default') {
+        regionalDefault[category] = 'denied';
+      }
+    });
+
+    setDefaultConsentState(regionalDefault);
+  });
+}
+
 // 2. Inject the External Script
 const lbCookieConsentGcm = {
   scriptHostURL: data.scriptHostURL,
   webAppServerHost: data.webAppServerHost,
   gcmMapping: data.gcmMapping || [],
+  regionSpecificBehavior: data.regionSpecificBehavior || [],
   defaultsInitialized: true
 };
 
