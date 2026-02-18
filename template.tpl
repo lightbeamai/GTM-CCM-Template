@@ -150,8 +150,8 @@ ___TEMPLATE_PARAMETERS___
       {
         "param": {
           "type": "SELECT",
-          "name": "analytics_storage",
-          "displayName": "analytics_storage",
+          "name": "ad_personalization",
+          "displayName": "Ad Personalization",
           "selectItems": [
             {
               "value": "On by default",
@@ -175,79 +175,7 @@ ___TEMPLATE_PARAMETERS___
         "param": {
           "type": "SELECT",
           "name": "ad_storage",
-          "displayName": "ad_storage",
-          "selectItems": [
-            {
-              "value": "On by default",
-              "displayValue": "On by default"
-            },
-            {
-              "value": "Off by default",
-              "displayValue": "Off by default"
-            },
-            {
-              "value": "Use global default",
-              "displayValue": "Use global default"
-            }
-          ],
-          "simpleValueType": true,
-          "defaultValue": "Use global default"
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "functionality_storage",
-          "displayName": "functionality_storage",
-          "selectItems": [
-            {
-              "value": "On by default",
-              "displayValue": "On by default"
-            },
-            {
-              "value": "Off by default",
-              "displayValue": "Off by default"
-            },
-            {
-              "value": "Use global default",
-              "displayValue": "Use global default"
-            }
-          ],
-          "simpleValueType": true,
-          "defaultValue": "Use global default"
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "personalization_storage",
-          "displayName": "personalization_storage",
-          "selectItems": [
-            {
-              "value": "On by default",
-              "displayValue": "On by default"
-            },
-            {
-              "value": "Off by default",
-              "displayValue": "Off by default"
-            },
-            {
-              "value": "Use global default",
-              "displayValue": "Use global default"
-            }
-          ],
-          "simpleValueType": true,
-          "defaultValue": "Use global default"
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "security_storage",
-          "displayName": "security_storage",
+          "displayName": "Ad Storage",
           "selectItems": [
             {
               "value": "On by default",
@@ -271,7 +199,7 @@ ___TEMPLATE_PARAMETERS___
         "param": {
           "type": "SELECT",
           "name": "ad_user_data",
-          "displayName": "ad_user_data",
+          "displayName": "Ad User Data",
           "selectItems": [
             {
               "value": "On by default",
@@ -294,8 +222,80 @@ ___TEMPLATE_PARAMETERS___
       {
         "param": {
           "type": "SELECT",
-          "name": "ad_personalization",
-          "displayName": "ad_personalization",
+          "name": "analytics_storage",
+          "displayName": "Analytics Storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "functionality_storage",
+          "displayName": "Functionality Storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "personalization_storage",
+          "displayName": "Personalization Storage",
+          "selectItems": [
+            {
+              "value": "On by default",
+              "displayValue": "On by default"
+            },
+            {
+              "value": "Off by default",
+              "displayValue": "Off by default"
+            },
+            {
+              "value": "Use global default",
+              "displayValue": "Use global default"
+            }
+          ],
+          "simpleValueType": true,
+          "defaultValue": "Use global default"
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "security_storage",
+          "displayName": "Security Storage",
           "selectItems": [
             {
               "value": "On by default",
@@ -332,13 +332,13 @@ const encodeUri = require('encodeUri');
 const setDefaultConsentState = require('setDefaultConsentState');
 
 const GCM_CATEGORIES = [
-  'analytics_storage',
+  'ad_personalization',
   'ad_storage',
+  'ad_user_data',
+  'analytics_storage',
   'functionality_storage',
   'personalization_storage',
-  'security_storage',
-  'ad_user_data',
-  'ad_personalization'
+  'security_storage'
 ];
 
 const parseRegionString = (regionString) => {
