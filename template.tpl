@@ -329,6 +329,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const setInWindow = require('setInWindow');
 const injectScript = require('injectScript');
 const encodeUri = require('encodeUri');
+const getCookieValues = require('getCookieValues');
 const setDefaultConsentState = require('setDefaultConsentState');
 
 const GCM_CATEGORIES = [
@@ -341,6 +342,43 @@ const GCM_CATEGORIES = [
   'security_storage'
 ];
 
+const WAIT_FOR_UPDATE_MS = 500;
+const LB_COOKIE_CONSENT_COOKIE = 'lb-cookie-consent';
+const GDPR_REGION_CODES = [
+  'AT',
+  'BE',
+  'BG',
+  'CH',
+  'CY',
+  'CZ',
+  'DE',
+  'DK',
+  'EE',
+  'ES',
+  'FI',
+  'FR',
+  'GB',
+  'GR',
+  'HR',
+  'HU',
+  'IE',
+  'IS',
+  'IT',
+  'LI',
+  'LT',
+  'LU',
+  'LV',
+  'MT',
+  'NL',
+  'NO',
+  'PL',
+  'PT',
+  'RO',
+  'SE',
+  'SI',
+  'SK'
+];
+
 const parseRegionString = (regionString) => {
   if (!regionString) return [];
   return regionString
@@ -349,10 +387,13 @@ const parseRegionString = (regionString) => {
     .filter((code) => code);
 };
 
+const hasLbCookieConsent = () => getCookieValues(LB_COOKIE_CONSENT_COOKIE).length > 0;
+
+const isFirstVisit = !hasLbCookieConsent();
+
 // 1. Process Default Consents Synchronously
 // This block runs immediately when the tag fires, blocking cookies instantly
 const consentDefaults = {
-  wait_for_update: 500,
   ad_storage: 'denied',
   analytics_storage: 'denied',
   ad_user_data: 'denied',
@@ -371,8 +412,19 @@ if (data.gcmMapping && data.gcmMapping.length > 0) {
   });
 }
 
-// Apply defaults immediately, even when gcmMapping is empty/missing.
-setDefaultConsentState(consentDefaults);
+if (isFirstVisit) {
+  // Apply defaults immediately, even when gcmMapping is empty/missing.
+  setDefaultConsentState(consentDefaults);
+
+  // delay only for first-visit users of GDPR countries
+  setDefaultConsentState({
+    region: GDPR_REGION_CODES,
+    wait_for_update: WAIT_FOR_UPDATE_MS
+  });
+} else {
+  consentDefaults.wait_for_update = WAIT_FOR_UPDATE_MS;
+  setDefaultConsentState(consentDefaults);
+}
 
 if (data.regionSpecificBehavior && data.regionSpecificBehavior.length > 0) {
   data.regionSpecificBehavior.forEach((regionRule) => {
@@ -380,9 +432,15 @@ if (data.regionSpecificBehavior && data.regionSpecificBehavior.length > 0) {
     if (!regionCodes.length) return;
 
     const regionalDefault = {
-      wait_for_update: 500,
       region: regionCodes
     };
+
+    // Regional overrides replace broader GDPR defaults, so GDPR-targeted first visits
+    // must carry wait_for_update forward to preserve the initial hold.
+    const targetsGdprRegion = regionCodes.some((code) => GDPR_REGION_CODES.indexOf(code) !== -1);
+    if (!isFirstVisit || (isFirstVisit && targetsGdprRegion)) {
+      regionalDefault.wait_for_update = WAIT_FOR_UPDATE_MS;
+    }
 
     GCM_CATEGORIES.forEach((category) => {
       if (regionRule[category] === 'On by default') {
@@ -466,6 +524,39 @@ ___WEB_PERMISSIONS___
                     "boolean": false
                   }
                 ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "get_cookies",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "cookieAccess",
+          "value": {
+            "type": 1,
+            "string": "specific"
+          }
+        },
+        {
+          "key": "cookieNames",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "lb-cookie-consent"
               }
             ]
           }
